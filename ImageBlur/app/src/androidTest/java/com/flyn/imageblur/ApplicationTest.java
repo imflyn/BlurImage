@@ -1,4 +1,4 @@
-package com.flyn.blurimage;
+package com.flyn.imageblur;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

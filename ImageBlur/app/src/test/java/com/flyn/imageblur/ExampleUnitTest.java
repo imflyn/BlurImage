@@ -1,4 +1,4 @@
-package com.flyn.blurimage;
+package com.flyn.imageblur;
 
 import org.junit.Test;
 
