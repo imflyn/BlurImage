@@ -14,17 +14,15 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
-public class MainActivity extends AppCompatActivity
-{
+public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Blur";
 
-    private ImageView      imageView;
-    private FrameLayout    frameLayout;
+    private ImageView imageView;
+    private FrameLayout frameLayout;
     private RelativeLayout relativeLayout;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -32,24 +30,20 @@ public class MainActivity extends AppCompatActivity
         frameLayout = (FrameLayout) findViewById(R.id.frameLayout);
         relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
 
-        String url = "http://h.hiphotos.baidu.com/image/w%3D230/sign=6ef7046bb119ebc4c078719ab227cf79/0bd162d9f2d3572c0619a7d28813632763d0c3c0.jpg";
-        ImageLoader.getInstance().displayImage(url, imageView, new ImageLoadingListener()
-        {
+        String url = "http://i4.17173.itc.cn/2008/news/2008/12/12/1294_1212018_07s.jpg";
+        ImageLoader.getInstance().displayImage(url, imageView, new ImageLoadingListener() {
             @Override
-            public void onLoadingStarted(String imageUri, View view)
-            {
+            public void onLoadingStarted(String imageUri, View view) {
 
             }
 
             @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason)
-            {
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
 
             }
 
             @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage)
-            {
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 long time = System.currentTimeMillis();
 
 
@@ -60,8 +54,7 @@ public class MainActivity extends AppCompatActivity
                 Log.i(TAG, "frameLayout height:" + frameLayout.getHeight());
 
 
-                float rates = bmp.getHeight() > relativeLayout.getHeight() ? (float) bmp.getHeight() / (float) relativeLayout.getHeight() : (float)
-                        bmp.getHeight() / (float) relativeLayout.getHeight();
+                float rates = (float) bmp.getHeight() / (float) relativeLayout.getHeight();
 
                 int y = (int) (rates * (frameLayout.getHeight()));
 
@@ -69,20 +62,18 @@ public class MainActivity extends AppCompatActivity
                 Log.i(TAG, "y:" + y);
 
                 int width = bmp.getWidth() < frameLayout.getWidth() ? bmp.getWidth() : frameLayout.getWidth();
-                int height = frameLayout.getHeight() < (bmp.getHeight() - y) ? frameLayout.getHeight() : (bmp.getHeight() - y);
+                int height = frameLayout.getHeight() < y ? frameLayout.getHeight() : y;
 
                 Log.i(TAG, "bmp.getHeight() - y：" + (bmp.getHeight() - y));
 
                 Bitmap newBitmap = Bitmap.createBitmap(bmp, 0, bmp.getHeight() - y, width, height);
                 frameLayout.setBackgroundDrawable(new BitmapDrawable(newBitmap));
 
-
                 Log.i(TAG, "spend time:" + (System.currentTimeMillis() - time));
             }
 
             @Override
-            public void onLoadingCancelled(String imageUri, View view)
-            {
+            public void onLoadingCancelled(String imageUri, View view) {
 
             }
         });
@@ -90,14 +81,12 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    public static Bitmap fastblur(Bitmap sentBitmap, int radius)
-    {
+    public static Bitmap fastblur(Bitmap sentBitmap, int radius) {
 
 
         Bitmap bitmap = sentBitmap.copy(sentBitmap.getConfig(), true);
 
-        if (radius < 1)
-        {
+        if (radius < 1) {
             return (null);
         }
 
@@ -121,8 +110,7 @@ public class MainActivity extends AppCompatActivity
         int divsum = (div + 1) >> 1;
         divsum *= divsum;
         int dv[] = new int[256 * divsum];
-        for (i = 0; i < 256 * divsum; i++)
-        {
+        for (i = 0; i < 256 * divsum; i++) {
             dv[i] = (i / divsum);
         }
 
@@ -137,11 +125,9 @@ public class MainActivity extends AppCompatActivity
         int routsum, goutsum, boutsum;
         int rinsum, ginsum, binsum;
 
-        for (y = 0; y < h; y++)
-        {
+        for (y = 0; y < h; y++) {
             rinsum = ginsum = binsum = routsum = goutsum = boutsum = rsum = gsum = bsum = 0;
-            for (i = -radius; i <= radius; i++)
-            {
+            for (i = -radius; i <= radius; i++) {
                 p = pix[yi + Math.min(wm, Math.max(i, 0))];
                 sir = stack[i + radius];
                 sir[0] = (p & 0xff0000) >> 16;
@@ -151,13 +137,11 @@ public class MainActivity extends AppCompatActivity
                 rsum += sir[0] * rbs;
                 gsum += sir[1] * rbs;
                 bsum += sir[2] * rbs;
-                if (i > 0)
-                {
+                if (i > 0) {
                     rinsum += sir[0];
                     ginsum += sir[1];
                     binsum += sir[2];
-                } else
-                {
+                } else {
                     routsum += sir[0];
                     goutsum += sir[1];
                     boutsum += sir[2];
@@ -165,8 +149,7 @@ public class MainActivity extends AppCompatActivity
             }
             stackpointer = radius;
 
-            for (x = 0; x < w; x++)
-            {
+            for (x = 0; x < w; x++) {
 
                 r[yi] = dv[rsum];
                 g[yi] = dv[gsum];
@@ -183,8 +166,7 @@ public class MainActivity extends AppCompatActivity
                 goutsum -= sir[1];
                 boutsum -= sir[2];
 
-                if (y == 0)
-                {
+                if (y == 0) {
                     vmin[x] = Math.min(x + radius + 1, wm);
                 }
                 p = pix[yw + vmin[x]];
@@ -216,12 +198,10 @@ public class MainActivity extends AppCompatActivity
             }
             yw += w;
         }
-        for (x = 0; x < w; x++)
-        {
+        for (x = 0; x < w; x++) {
             rinsum = ginsum = binsum = routsum = goutsum = boutsum = rsum = gsum = bsum = 0;
             yp = -radius * w;
-            for (i = -radius; i <= radius; i++)
-            {
+            for (i = -radius; i <= radius; i++) {
                 yi = Math.max(0, yp) + x;
 
                 sir = stack[i + radius];
@@ -236,27 +216,23 @@ public class MainActivity extends AppCompatActivity
                 gsum += g[yi] * rbs;
                 bsum += b[yi] * rbs;
 
-                if (i > 0)
-                {
+                if (i > 0) {
                     rinsum += sir[0];
                     ginsum += sir[1];
                     binsum += sir[2];
-                } else
-                {
+                } else {
                     routsum += sir[0];
                     goutsum += sir[1];
                     boutsum += sir[2];
                 }
 
-                if (i < hm)
-                {
+                if (i < hm) {
                     yp += w;
                 }
             }
             yi = x;
             stackpointer = radius;
-            for (y = 0; y < h; y++)
-            {
+            for (y = 0; y < h; y++) {
                 // Preserve alpha channel: ( 0xff000000 & pix[yi] )
                 pix[yi] = (0xff000000 & pix[yi]) | (dv[rsum] << 16) | (dv[gsum] << 8) | dv[bsum];
 
@@ -271,8 +247,7 @@ public class MainActivity extends AppCompatActivity
                 goutsum -= sir[1];
                 boutsum -= sir[2];
 
-                if (x == 0)
-                {
+                if (x == 0) {
                     vmin[y] = Math.min(y + r1, hm) * w;
                 }
                 p = x + vmin[y];

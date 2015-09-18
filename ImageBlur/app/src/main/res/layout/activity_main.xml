@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/relativeLayout"
         android:layout_width="fill_parent"
-        android:layout_height="400dip">
+        android:layout_height="230dip">
 
         <ImageView
             android:id="@+id/imageView"
