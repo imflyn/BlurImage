@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -21,6 +22,11 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout frameLayout;
     private RelativeLayout relativeLayout;
 
+
+    private ImageView imageView2;
+    private FrameLayout frameLayout2;
+    private RelativeLayout relativeLayout2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +36,11 @@ public class MainActivity extends AppCompatActivity {
         frameLayout = (FrameLayout) findViewById(R.id.frameLayout);
         relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
 
-        String url = "http://i4.17173.itc.cn/2008/news/2008/12/12/1294_1212018_07s.jpg";
+        imageView2 = (ImageView) findViewById(R.id.imageView2);
+        frameLayout2 = (FrameLayout) findViewById(R.id.frameLayout2);
+        relativeLayout2 = (RelativeLayout) findViewById(R.id.relativeLayout2);
+
+        String url = "http://tupian.enterdesk.com/2013/mxy/12/10/15/3.jpg";
         ImageLoader.getInstance().displayImage(url, imageView, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
@@ -44,32 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                long time = System.currentTimeMillis();
+                attachImage(loadedImage, relativeLayout, frameLayout);
 
-
-                Bitmap bmp = fastblur(loadedImage, 10);
-                //                Log.i(TAG, "bmp width:" + bmp.getWidth());
-                Log.i(TAG, "bmp height:" + bmp.getHeight());
-                //                Log.i(TAG, "frameLayout width:" + frameLayout.getWidth());
-                Log.i(TAG, "frameLayout height:" + frameLayout.getHeight());
-
-
-                float rates = (float) bmp.getHeight() / (float) relativeLayout.getHeight();
-
-                int y = (int) (rates * (frameLayout.getHeight()));
-
-                Log.i(TAG, " relativeLayout.getHeight():" + relativeLayout.getHeight());
-                Log.i(TAG, "y:" + y);
-
-                int width = bmp.getWidth() < frameLayout.getWidth() ? bmp.getWidth() : frameLayout.getWidth();
-                int height = frameLayout.getHeight() < y ? frameLayout.getHeight() : y;
-
-                Log.i(TAG, "bmp.getHeight() - y：" + (bmp.getHeight() - y));
-
-                Bitmap newBitmap = Bitmap.createBitmap(bmp, 0, bmp.getHeight() - y, width, height);
-                frameLayout.setBackgroundDrawable(new BitmapDrawable(newBitmap));
-
-                Log.i(TAG, "spend time:" + (System.currentTimeMillis() - time));
             }
 
             @Override
@@ -78,6 +64,58 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        String url2 = "http://pic1a.nipic.com/2008-12-23/2008122319435535_2.jpg";
+        ImageLoader.getInstance().displayImage(url2, imageView2, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                attachImage(loadedImage, relativeLayout2, frameLayout2);
+
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        });
+
+    }
+
+    private void attachImage(Bitmap loadedImage, ViewGroup parent, ViewGroup child) {
+        long time = System.currentTimeMillis();
+
+        Bitmap bmp = fastblur(loadedImage, 10);
+        //                Log.i(TAG, "bmp width:" + bmp.getWidth());
+        Log.i(TAG, "bmp height:" + bmp.getHeight());
+        //                Log.i(TAG, "frameLayout width:" + frameLayout.getWidth());
+        Log.i(TAG, "frameLayout height:" + child.getHeight());
+
+
+        float rates = (float) bmp.getHeight() / (float) parent.getHeight();
+
+        int y = (int) (rates * (child.getHeight()));
+
+        Log.i(TAG, " relativeLayout.getHeight():" + parent.getHeight());
+        Log.i(TAG, "y:" + y);
+
+        int width = bmp.getWidth() < child.getWidth() ? bmp.getWidth() : child.getWidth();
+        int height = child.getHeight() < y ? child.getHeight() : y;
+
+        Log.i(TAG, "bmp.getHeight() - y：" + (bmp.getHeight() - y));
+
+        Bitmap newBitmap = Bitmap.createBitmap(bmp, 0, bmp.getHeight() - y, width, height);
+        child.setBackgroundDrawable(new BitmapDrawable(newBitmap));
+
+        Log.i(TAG, "spend time:" + (System.currentTimeMillis() - time));
     }
 
 

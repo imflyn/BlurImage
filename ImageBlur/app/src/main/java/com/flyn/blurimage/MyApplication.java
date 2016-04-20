@@ -10,11 +10,9 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 /**
  * Created by flyn on 2015-09-17.
  */
-public class MyApplication extends Application
-{
+public class MyApplication extends Application {
     @Override
-    public void onCreate()
-    {
+    public void onCreate() {
         super.onCreate();
         ImageLoaderConfiguration.Builder config = new ImageLoaderConfiguration.Builder(this);
         config.threadPriority(Thread.NORM_PRIORITY - 2);
